@@ -15,6 +15,7 @@ import org.apache.maven.project.MavenProject;
  * @requiresDependencyResolution test
  * @goal run-specs
  * @phase verify
+ * @since 1.0.0
  */
 public class Specs2RunnerMojo extends AbstractMojo {
     /** @parameter default-value="${project}" */
@@ -25,6 +26,7 @@ public class Specs2RunnerMojo extends AbstractMojo {
     private File classesDirectory;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        new Specs2Runner().runSpecs(getLog(), mavenProject, classesDirectory, testClassesDirectory);
+        if (!(new Specs2Runner().runSpecs(getLog(), mavenProject, classesDirectory, testClassesDirectory)))
+            throw new MojoFailureException("there have been errors/failures");
     }
 }

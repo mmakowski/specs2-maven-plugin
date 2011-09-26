@@ -30,6 +30,8 @@ class Specs2Runner {
     }
     
     def report = testCounts.toSeq.map(p => p._1 + ": " + p._2).mkString(", ")
+    
+    def noErrorsOrFailures = testCounts("Error") + testCounts("Failure") == 0
   }
   
   private class DebugLevelLogger(log: Log) extends Logger {
@@ -41,7 +43,7 @@ class Specs2Runner {
     def trace(t: Throwable) = log.error(t)
   }
   
-  def runSpecs(log: Log, project: MavenProject, classesDir: File, testClassesDir: File): Unit = {
+  def runSpecs(log: Log, project: MavenProject, classesDir: File, testClassesDir: File): java.lang.Boolean = {
     val classpath = {
       def url(file: File) = new URL(file.getAbsoluteFile.toURI.toASCIIString)
       def urlsOf(artifacts: Set[Artifact]) = artifacts.map(_.getFile).map(url(_))
@@ -55,13 +57,14 @@ class Specs2Runner {
     
     val classLoader = new URLClassLoader(classpath.toArray[URL], getClass.getClassLoader)
     val runner = new TestInterfaceRunner(classLoader, Array(new DebugLevelLogger(log)))
-    def runSpec(spec: String) = {
+    def runSpec(succesfulSoFar: Boolean, spec: String) = {
       log.info(spec)
       val handler = new AggregatingHandler
       runner.runSpecification(spec, handler, Array("console", "html", "junitxml"))
       log.info(handler.report)
+      succesfulSoFar && handler.noErrorsOrFailures  
     }
-    specs.foreach(runSpec(_))
+    specs.foldLeft(true)(runSpec)
   }
 
   private def findSpecsIn(dir: Path, pkg: String): Seq[String] = {
