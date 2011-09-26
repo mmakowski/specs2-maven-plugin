@@ -11,6 +11,8 @@ import org.apache.maven.artifact.Artifact
 import scala.collection.JavaConversions._
 
 /**
+ * Executes pre-compiled specifications found in test classes directory. 
+ * 
  * @author Maciek Makowski
  */
 class Specs2Runner {
@@ -22,20 +24,17 @@ class Specs2Runner {
   }
   
   def runSpecs(log: Log, project: MavenProject, classesDir: File, testClassesDir: File): Unit = {
-    //log.info(getClass.getClassLoader().asInstanceOf[URLClassLoader].getURLs().toSeq.toString)
-    log.info(project.getArtifacts.asInstanceOf[java.util.Set[Artifact]].toString)
     val classpath = buildClasspath(project, classesDir, testClassesDir) //
     log.debug("test classpath: " + classpath)
-    val runner = new TestInterfaceRunner(new URLClassLoader(classpath.toArray[URL]), Array())
-    runner.runSpecification("com.mmakowski.scratch.AppySpec", new TestHandler(log), Array("html", "junitxml"))
+    val classLoader = new URLClassLoader(classpath.toArray[URL], getClass.getClassLoader)
+    val runner = new TestInterfaceRunner(classLoader, Array())
+    runner.runSpecification("HelloWorldSpec", new TestHandler(log), Array("html", "junitxml"))
   }
   
   private def buildClasspath(project: MavenProject, classesDir: File, testClassesDir: File) = {
     def url(file: File) = new URL(file.getAbsoluteFile.toURI.toASCIIString)
-    def urlsFrom(artifacts: Set[Artifact]) = artifacts.map(_.getFile).map(url(_))
-    val artifacts = Set() ++ project.getArtifacts.asInstanceOf[java.util.Set[Artifact]]
-    // new URL( file.toURI().toASCIIString() )
-    //Array()) // c:/Data/projects/attic/java-with-specs2/
-    Seq(url(testClassesDir), url(classesDir)) ++ urlsFrom(artifacts)
+    def urlsOf(artifacts: Set[Artifact]) = artifacts.map(_.getFile).map(url(_))
+    val dependencies = Set() ++ project.getArtifacts.asInstanceOf[java.util.Set[Artifact]]
+    Seq(url(testClassesDir), url(classesDir)) ++ urlsOf(dependencies)
   }
 }
