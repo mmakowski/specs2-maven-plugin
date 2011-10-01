@@ -25,6 +25,6 @@ Add this to the build/plugins section of your pom:
       </executions>
     </plugin>
 
-now the verify phase will execute all specifications in your project and will generate HTML reports (in 
-`target/specs2-reports`) and JUnit XML reports (in `target/test-reports`).
+now the _verify_ phase of your maven build will execute all specifications in your project and will generate HTML 
+reports (in `target/specs2-reports`) and JUnit XML reports (in `target/test-reports`).
 

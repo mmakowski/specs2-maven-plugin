@@ -47,9 +47,34 @@
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.2</version>
+        <configuration>
+          <includes>
+            <include>**/*</include>
+          </includes>
+        </configuration>
+      </plugin>
+    </plugins>
 	</build>
 
+  <distributionManagement>
+    <repository>
+      <id>scala-tools.org</id>
+      <name>releases</name>
+      <url>http://nexus.scala-tools.org/content/repositories/releases</url>
+      <uniqueVersion>false</uniqueVersion>
+    </repository>
+    <snapshotRepository>
+      <id>scala-tools.org</id>
+      <name>snapshots</name>
+      <url>http://nexus.scala-tools.org/content/repositories/snapshots</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+  </distributionManagement>
+  
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
