@@ -26,7 +26,7 @@ public class Specs2RunnerMojo extends AbstractMojo {
     private File classesDirectory;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if (!(new Specs2Runner().runSpecs(getLog(), mavenProject, classesDirectory, testClassesDirectory)))
+        if (!(new Specs2Runner().runSpecs(getLog(), mavenProject, classesDirectory, testClassesDirectory).booleanValue()))
             throw new MojoFailureException("there have been errors/failures");
     }
 }
