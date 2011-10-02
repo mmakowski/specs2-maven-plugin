@@ -65,13 +65,11 @@
       <id>scala-tools.org</id>
       <name>releases</name>
       <url>http://nexus.scala-tools.org/content/repositories/releases</url>
-      <uniqueVersion>false</uniqueVersion>
     </repository>
     <snapshotRepository>
       <id>scala-tools.org</id>
       <name>snapshots</name>
       <url>http://nexus.scala-tools.org/content/repositories/snapshots</url>
-      <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>
   </distributionManagement>
   
@@ -98,12 +96,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.scala-incubator.io</groupId>
-			<artifactId>scala-io-core_2.9.1</artifactId>
+			<artifactId>scala-io-core_${scala.version}</artifactId>
 			<version>0.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.scala-incubator.io</groupId>
-			<artifactId>scala-io-file_2.9.1</artifactId>
+			<artifactId>scala-io-file_${scala.version}</artifactId>
 			<version>0.2.0</version>
 		</dependency>
 		<!-- for specs2 to generate HTML reports -->
