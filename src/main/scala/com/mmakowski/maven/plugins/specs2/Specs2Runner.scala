@@ -1,6 +1,6 @@
 package com.mmakowski.maven.plugins.specs2
 
-import org.specs2.runner.TestInterfaceRunner
+import org.specs2.runner.{HtmlRunner, TestInterfaceRunner}
 import org.scalatools.testing.{Event, EventHandler, Logger}
 import org.scalatools.testing.Result._
 import java.net.{URL, URLClassLoader}
@@ -21,6 +21,8 @@ import scala.collection.mutable.Map
  * @since 1.0.0
  */
 class Specs2Runner {
+  // TODO: clean up
+  
   private class AggregatingHandler extends EventHandler {
     val testCounts: Map[String, Int] = Map() withDefaultValue 0
     
@@ -52,7 +54,8 @@ class Specs2Runner {
     }
     log.debug("test classpath: " + classpath)
     
-    val specs = findSpecsIn(Path(testClassesDir.getAbsolutePath), "")
+    val testClassesPath = Path(testClassesDir.getAbsolutePath)
+    val specs = findSpecsIn(testClassesPath, "", _.name.endsWith("Spec.class"))
     log.debug("specifications found: " + specs)
     
     val classLoader = new URLClassLoader(classpath.toArray[URL], getClass.getClassLoader)
@@ -64,15 +67,39 @@ class Specs2Runner {
       log.info(handler.report)
       succesfulSoFar && handler.noErrorsOrFailures  
     }
-    specs.foldLeft(true)(runSpec)
+    
+    def generateIndex() = {
+      val indices = findSpecsIn(testClassesPath, "", _.name == "index.class")
+      if (indices isEmpty) true else {
+        val index = indices(0)
+        log.info("generating " + index)
+        object generator extends Runnable {
+          var success = false
+          def run() = {
+            try {
+              new HtmlRunner().start(index)
+              success = true
+            } catch {
+              case e => log.error(e)
+            }
+          }
+        }
+        val t = new Thread(generator, "index generator")
+        t.setContextClassLoader(classLoader)
+        t.start()
+        t.join()
+        generator.success
+      }
+    }
+    
+    specs.foldLeft(true)(runSpec) && generateIndex 
   }
 
-  private def findSpecsIn(dir: Path, pkg: String): Seq[String] = {
+  private def findSpecsIn(dir: Path, pkg: String, pred: Path => Boolean): Seq[String] = {
     def qualified(name: String) = if (pkg.isEmpty) name else pkg + "." + name
     dir.children().toSeq.collect {
-      case IsFile(f) if f.name.endsWith("Spec.class") => Seq(qualified(f.name.take(f.name.length - ".class".length))) 
-      case IsDirectory(d) => findSpecsIn(d, qualified(d.name))
+      case IsFile(f) if pred(f) => Seq(qualified(f.name.take(f.name.length - ".class".length))) 
+      case IsDirectory(d) => findSpecsIn(d, qualified(d.name), pred)
     }.flatten
   }
-
 }
