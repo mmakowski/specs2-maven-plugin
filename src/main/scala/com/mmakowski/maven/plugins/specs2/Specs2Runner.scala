@@ -12,7 +12,7 @@ import scalax.file.{Path, PathMatcher}
 import scalax.file.PathMatcher._
 import scala.collection.JavaConversions._
 
-import scala.collection.mutable.Map
+import scala.collection.mutable.{Map, ListBuffer}
 
 /**
  * Executes pre-compiled specifications found in test classes directory. Expects all specifiations to have class names ending with "Spec". 
@@ -22,11 +22,11 @@ import scala.collection.mutable.Map
  */
 class Specs2Runner {
   // TODO: clean up
-  
+
   private class AggregatingHandler extends EventHandler {
     val testCounts: Map[String, Int] = Map() withDefaultValue 0
     
-    def handle(event: Event) = {
+    def handle(event: Event) {
       val resultType = event.result.toString
       testCounts(resultType) = testCounts(resultType) + 1  
     }
@@ -47,6 +47,8 @@ class Specs2Runner {
   }
   
   def runSpecs(log: Log, project: MavenProject, classesDir: File, testClassesDir: File, suffix: String): java.lang.Boolean = {
+    val failures = ListBuffer[String]()
+
     val classpath = {
       def url(file: File) = new URL(file.getAbsoluteFile.toURI.toASCIIString)
       def urlsOf(artifacts: Set[Artifact]) = artifacts.map(_.getFile).map(url(_))
@@ -71,8 +73,10 @@ class Specs2Runner {
 
       log.info(spec + " Completed!")
       log.info(handler.report)
-      
-      succesfulSoFar && handler.noErrorsOrFailures
+
+      val result = handler.noErrorsOrFailures
+      if (!result) failures += spec
+      succesfulSoFar && result
     }
     
     def generateIndex() = {
@@ -98,8 +102,14 @@ class Specs2Runner {
         generator.success
       }
     }
-    
-    specs.foldLeft(true)(runSpec) && generateIndex 
+
+    def printFailingSpecs() {
+      log.info(failures.mkString("\n\nSpecs Failing or In Error:\n", "\n", "\n\n"))
+    }
+
+    val result = specs.foldLeft(true)(runSpec)
+    printFailingSpecs()
+    result && generateIndex
   }
 
   private def findSpecsIn(dir: Path, pkg: String, pred: Path => Boolean): Seq[String] = {
