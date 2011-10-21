@@ -27,13 +27,14 @@ class Specs2Runner {
     val testCounts: Map[String, Int] = Map() withDefaultValue 0
     
     def handle(event: Event) = {
-      val resultType = event.result.toString 
+      val resultType = event.result.toString
       testCounts(resultType) = testCounts(resultType) + 1  
     }
     
-    def report = testCounts.toSeq.map(p => p._1 + ": " + p._2).mkString(", ")
-    
+    def report = List("Success", "Failure", "Error").map(s => s + ": " + testCounts(s)).mkString(" "*3)
+
     def noErrorsOrFailures = testCounts("Error") + testCounts("Failure") == 0
+    
   }
   
   private class DebugLevelLogger(log: Log) extends Logger {
@@ -45,7 +46,7 @@ class Specs2Runner {
     def trace(t: Throwable) = log.error(t)
   }
   
-  def runSpecs(log: Log, project: MavenProject, classesDir: File, testClassesDir: File): java.lang.Boolean = {
+  def runSpecs(log: Log, project: MavenProject, classesDir: File, testClassesDir: File, suffix: String): java.lang.Boolean = {
     val classpath = {
       def url(file: File) = new URL(file.getAbsoluteFile.toURI.toASCIIString)
       def urlsOf(artifacts: Set[Artifact]) = artifacts.map(_.getFile).map(url(_))
@@ -53,19 +54,25 @@ class Specs2Runner {
       Seq(url(testClassesDir), url(classesDir)) ++ urlsOf(dependencies)
     }
     log.debug("test classpath: " + classpath)
-    
+
+    val fullSuffix = "%s.class" format suffix
+    log.info("searching for specs ending in %s" format fullSuffix)
     val testClassesPath = Path(testClassesDir.getAbsolutePath)
-    val specs = findSpecsIn(testClassesPath, "", _.name.endsWith("Spec.class"))
+    val specs = findSpecsIn(testClassesPath, "", _.name.endsWith(fullSuffix))
     log.debug("specifications found: " + specs)
     
     val classLoader = new URLClassLoader(classpath.toArray[URL], getClass.getClassLoader)
     val runner = new TestInterfaceRunner(classLoader, Array(new DebugLevelLogger(log)))
     def runSpec(succesfulSoFar: Boolean, spec: String) = {
-      log.info(spec)
+      log.info(spec + " Starting...")
+
       val handler = new AggregatingHandler
       runner.runSpecification(spec, handler, Array("console", "html", "junitxml"))
+
+      log.info(spec + " Completed!")
       log.info(handler.report)
-      succesfulSoFar && handler.noErrorsOrFailures  
+      
+      succesfulSoFar && handler.noErrorsOrFailures
     }
     
     def generateIndex() = {
