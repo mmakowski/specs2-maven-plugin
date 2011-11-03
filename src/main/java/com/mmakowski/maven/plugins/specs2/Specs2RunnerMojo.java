@@ -24,9 +24,17 @@ public class Specs2RunnerMojo extends AbstractMojo {
     private File testClassesDirectory;
     /** @parameter default-value="${project.build.outputDirectory}" */
     private File classesDirectory;
+    /** @parameter expression="${run-specs.suffix}" default-value="Spec" */
+    private String suffix;
+    /** @parameter expression="${skipTests}" default-value=false */
+    private Boolean skipTests;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if (!(new Specs2Runner().runSpecs(getLog(), mavenProject, classesDirectory, testClassesDirectory).booleanValue()))
-            throw new MojoFailureException("there have been errors/failures");
+        if (!skipTests) {
+            if (!(new Specs2Runner().runSpecs(getLog(), mavenProject, classesDirectory, testClassesDirectory, suffix).booleanValue()))
+                throw new MojoFailureException("there have been errors/failures");
+        } else {
+            System.out.println("SKIPPING SPECS"); // eh, should probably be using a logger
+        }
     }
 }
