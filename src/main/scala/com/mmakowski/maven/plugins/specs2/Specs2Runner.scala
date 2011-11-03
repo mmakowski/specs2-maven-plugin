@@ -2,6 +2,7 @@ package com.mmakowski.maven.plugins.specs2
 
 import org.specs2.runner.{HtmlRunner, TestInterfaceRunner}
 import org.scalatools.testing.{Event, EventHandler, Logger}
+import org.scalatools.testing.Result
 import org.scalatools.testing.Result._
 import java.net.{URL, URLClassLoader}
 import java.io.File
@@ -31,7 +32,7 @@ class Specs2Runner {
       testCounts(resultType) = testCounts(resultType) + 1  
     }
     
-    def report = List("Success", "Failure", "Error").map(s => s + ": " + testCounts(s)).mkString(" "*3)
+    def report = Result.values.map(_.toString).map(s => s + ": " + testCounts(s)).mkString(" "*3)
 
     def noErrorsOrFailures = testCounts("Error") + testCounts("Failure") == 0
     
@@ -66,12 +67,12 @@ class Specs2Runner {
     val classLoader = new URLClassLoader(classpath.toArray[URL], getClass.getClassLoader)
     val runner = new TestInterfaceRunner(classLoader, Array(new DebugLevelLogger(log)))
     def runSpec(succesfulSoFar: Boolean, spec: String) = {
-      log.info(spec + " Starting...")
+      log.info(spec + " starting...")
 
       val handler = new AggregatingHandler
       runner.runSpecification(spec, handler, Array("console", "html", "junitxml"))
 
-      log.info(spec + " Completed!")
+      log.info(spec + " completed!")
       log.info(handler.report)
 
       val result = handler.noErrorsOrFailures
@@ -104,7 +105,7 @@ class Specs2Runner {
     }
 
     def printFailingSpecs() {
-      log.info(failures.mkString("\n\nSpecs Failing or In Error:\n", "\n", "\n\n"))
+      if (!failures.isEmpty) log.info(failures.mkString("\n\nSpecs Failing or In Error:\n", "\n", "\n\n"))
     }
 
     val result = specs.foldLeft(true)(runSpec)
