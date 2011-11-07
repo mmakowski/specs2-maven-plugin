@@ -6,12 +6,12 @@
 
   <parent>
     <groupId>com.mmakowski</groupId>
-    <artifactId>maven-specs2-plugin-tests</artifactId>
+    <artifactId>maven-specs2-plugin-test-java-spring</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>    
 
-  <artifactId>maven-specs2-plugin-test-java-simple</artifactId>
-  <name>java-simple</name>
+  <artifactId>maven-specs2-plugin-test-java-spring-main</artifactId>
+  <name>main</name>
  
   <build>
     <plugins>
@@ -28,20 +28,19 @@
  
   <dependencies>
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.6</version>
+      <groupId>com.mmakowski</groupId>
+      <artifactId>maven-specs2-plugin-test-java-spring-context</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-support</artifactId>
+      <version>3.0.6.RELEASE</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.9</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.8.5</version>
       <scope>test</scope>
     </dependency>
     <dependency>
