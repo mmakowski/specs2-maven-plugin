@@ -16,10 +16,10 @@ import scala.collection.JavaConversions._
 import scala.collection.mutable.{Map, ListBuffer}
 
 /**
- * Executes pre-compiled specifications found in test classes directory. Expects all specifiations to have class names ending with "Spec". 
+ * Executes pre-compiled specifications found in test classes directory. 
  * 
  * @author Maciek Makowski
- * @since 1.0.0
+ * @since 0.1.0
  */
 class Specs2Runner {
   // TODO: clean up
@@ -38,6 +38,9 @@ class Specs2Runner {
     
   }
   
+  /**
+   * Logger for test interface -- funnels all messages except for errors into maven debug logger 
+   */
   private class DebugLevelLogger(log: Log) extends Logger {
     def ansiCodesSupported = false
     def error(msg: String) = log.debug(msg)
@@ -59,23 +62,39 @@ class Specs2Runner {
     log.debug("test classpath: " + classpath)
 
     val fullSuffix = "%s.class" format suffix
-    log.info("searching for specs ending in %s" format fullSuffix)
+    log.debug("searching for specs ending in %s" format fullSuffix)
     val testClassesPath = Path(testClassesDir.getAbsolutePath)
     val specs = findSpecsIn(testClassesPath, "", _.name.endsWith(fullSuffix))
-    log.debug("specifications found: " + specs)
     
     val classLoader = new URLClassLoader(classpath.toArray[URL], getClass.getClassLoader)
+    def runWithTestClassLoader[T](threadName: String, body: => T) = {
+      object runner extends Runnable {
+        var success = false
+        def run() = {
+          try {
+            body
+            success = true
+          } catch {
+            case e => log.error(e)
+          }
+        }
+      }
+      val t = new Thread(runner, threadName)
+      t.setContextClassLoader(classLoader)
+      t.start()
+      t.join()
+      runner.success
+    }
+    
+    // test class loader is set on both parent thread and TestInterfaceRunner -- this is probably redundant 
     val runner = new TestInterfaceRunner(classLoader, Array(new DebugLevelLogger(log)))
     def runSpec(succesfulSoFar: Boolean, spec: String) = {
-      log.info(spec + " starting...")
-
+      log.info(spec + ":")
       val handler = new AggregatingHandler
-      runner.runSpecification(spec, handler, Array("console", "html", "junitxml"))
-
-      log.info(spec + " completed!")
+      val runCompleted = runWithTestClassLoader("spec runner", runner.runSpecification(spec, handler, Array("console", "html", "junitxml")))
       log.info(handler.report)
 
-      val result = handler.noErrorsOrFailures
+      val result = runCompleted && handler.noErrorsOrFailures
       if (!result) failures += spec
       succesfulSoFar && result
     }
@@ -85,22 +104,7 @@ class Specs2Runner {
       if (indices isEmpty) true else {
         val index = indices(0)
         log.info("generating " + index)
-        object generator extends Runnable {
-          var success = false
-          def run() = {
-            try {
-              new HtmlRunner().start(index)
-              success = true
-            } catch {
-              case e => log.error(e)
-            }
-          }
-        }
-        val t = new Thread(generator, "index generator")
-        t.setContextClassLoader(classLoader)
-        t.start()
-        t.join()
-        generator.success
+        runWithTestClassLoader("index generator", new HtmlRunner().start(index))
       }
     }
 
