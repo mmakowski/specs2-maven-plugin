@@ -11,6 +11,7 @@ import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
 import scalax.file.{Path, PathMatcher}
 import scalax.file.PathMatcher._
+
 import scala.collection.JavaConversions._
 
 import scala.collection.mutable.{Map, ListBuffer}
@@ -22,8 +23,9 @@ import scala.collection.mutable.{Map, ListBuffer}
  * @since 0.1.0
  */
 class Specs2Runner {
-  // TODO: clean up
-
+  /**
+   * A handler that counts the total for each possible result of test when running a Spec
+   */
   private class AggregatingHandler extends EventHandler {
     val testCounts: Map[String, Int] = Map() withDefaultValue 0
     
@@ -35,7 +37,6 @@ class Specs2Runner {
     def report = Result.values.map(_.toString).map(s => s + ": " + testCounts(s)).mkString(" "*3)
 
     def noErrorsOrFailures = testCounts("Error") + testCounts("Failure") == 0
-    
   }
   
   /**
@@ -50,20 +51,28 @@ class Specs2Runner {
     def trace(t: Throwable) = log.error(t)
   }
   
-  def runSpecs(log: Log, project: MavenProject, classesDir: File, testClassesDir: File, suffix: String): java.lang.Boolean = {
+  def runSpecs(log: Log, project: MavenProject, suffix: String): java.lang.Boolean = {
     val failures = ListBuffer[String]()
 
     val classpath = {
       def url(file: File) = new URL(file.getAbsoluteFile.toURI.toASCIIString)
-      def urlsOf(artifacts: Set[Artifact]) = artifacts.map(_.getFile).map(url(_))
-      val dependencies = Set() ++ project.getArtifacts.asInstanceOf[java.util.Set[Artifact]]
-      Seq(url(testClassesDir), url(classesDir)) ++ urlsOf(dependencies)
+      def urlsOf(files: List[String]) = files.map(new File(_)).map(url(_))
+      val dependencies = List() ++ project.getTestClasspathElements().asInstanceOf[java.util.List[String]]
+      urlsOf(dependencies)
     }
     log.debug("test classpath: " + classpath)
 
     val fullSuffix = "%s.class" format suffix
     log.debug("searching for specs ending in %s" format fullSuffix)
-    val testClassesPath = Path(testClassesDir.getAbsolutePath)
+    val testClassesPath = Path(project.getBuild.getTestOutputDirectory)
+
+    def findSpecsIn(dir: Path, pkg: String, pred: Path => Boolean): Seq[String] = {
+      def qualified(name: String) = if (pkg.isEmpty) name else pkg + "." + name
+      dir.children().toSeq.collect {
+        case IsFile(f) if pred(f) => Seq(qualified(f.name.take(f.name.length - ".class".length))) 
+        case IsDirectory(d) => findSpecsIn(d, qualified(d.name), pred)
+      }.flatten
+    }
     val specs = findSpecsIn(testClassesPath, "", _.name.endsWith(fullSuffix))
     
     val classLoader = new URLClassLoader(classpath.toArray[URL], getClass.getClassLoader)
@@ -115,13 +124,5 @@ class Specs2Runner {
     val result = specs.foldLeft(true)(runSpec)
     printFailingSpecs()
     result && generateIndex
-  }
-
-  private def findSpecsIn(dir: Path, pkg: String, pred: Path => Boolean): Seq[String] = {
-    def qualified(name: String) = if (pkg.isEmpty) name else pkg + "." + name
-    dir.children().toSeq.collect {
-      case IsFile(f) if pred(f) => Seq(qualified(f.name.take(f.name.length - ".class".length))) 
-      case IsDirectory(d) => findSpecsIn(d, qualified(d.name), pred)
-    }.flatten
   }
 }

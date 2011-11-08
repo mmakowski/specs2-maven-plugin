@@ -5,4 +5,10 @@ Initial release
 0.2.0
 
 - added configuration options for class suffix and skipping tests
+- more detailed reporting
 - fixed a problem with classpath not always being set correctly when running specs
+
+0.2.1
+
+- fixed a problem with test classpath order being nondeterministic
+- removed undocumented configuration options related to classes and test classes dirs
