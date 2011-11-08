@@ -7,7 +7,7 @@
 	<groupId>com.mmakowski</groupId>
 	<artifactId>maven-specs2-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>0.2.1</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<name>Maven specs2 Plug-in</name>
 
 	<properties>
