@@ -6,7 +6,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
 /**
- * Executes specs2 runner for all specifications in the current project. A thing
+ * Executes specs2 runner for all specifications in the current project. A thin
  * wrapper for {@link Specs2Runner}, which is implemented in Scala.
  * 
  * @author Maciek Makowski
