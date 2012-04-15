@@ -1,6 +1,5 @@
 package com.mmakowski.maven.plugins.specs2
 
-//import org.specs2.runner.{HtmlRunner, TestInterfaceRunner}
 import org.scalatools.testing.{Event, EventHandler, Logger}
 import org.scalatools.testing.Result
 import org.scalatools.testing.Result._
