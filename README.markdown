@@ -40,7 +40,7 @@ When `run-specs` goal is executed, the plug-in:
 Limitations
 -----------
 
-At them moment the plug-in has only been tested with specs2 1.6.1 and scala 2.9.1. It is likely that projects using
+At them moment the plug-in has only been tested with scala 2.9.1. It is likely that projects using
 other versions will not work.
 
 Credits
