@@ -3,25 +3,45 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+	<!-- for easy deployment to Maven Central -->
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
 
 	<groupId>com.mmakowski</groupId>
 	<artifactId>maven-specs2-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<version>0.3.0-SNAPSHOT</version>
-	<name>Maven specs2 Plug-in</name>
+	<name>specs2 Maven plugin</name>
+	<description>A Maven plugin that executes specs2 specifications</description>
+	<url>https://github.com/mmakowski/maven-specs2-plugin</url>
+
+	<licenses>
+		<license>
+			<name>BSD</name>
+			<url>http://www.opensource.org/licenses/bsd-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git://github.com/mmakowski/maven-specs2-plugin.git</connection>
+		<url>https://github.com/mmakowski/maven-specs2-plugin</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>mmakowski</id>
+			<name>Maciek Makowski</name>
+		</developer>
+	</developers>
 
 	<properties>
 		<maven.version>2.0.9</maven.version>
 		<scala.version>2.9.1</scala.version>
 	</properties>
-
-	<repositories>
-		<repository>
-			<id>scala-tools.org</id>
-			<name>releases</name>
-			<url>http://scala-tools.org/repo-releases</url>
-		</repository>
-	</repositories>
 
 	<build>
 		<plugins>
@@ -57,17 +77,25 @@
 					</includes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
 	<distributionManagement>
 		<repository>
-			<id>scala-tools.org</id>
+			<id>oss.sonatype.org</id>
 			<name>releases</name>
 			<url>http://nexus.scala-tools.org/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>scala-tools.org</id>
+			<id>oss.sonatype.org</id>
 			<name>snapshots</name>
 			<url>http://nexus.scala-tools.org/content/repositories/snapshots</url>
 		</snapshotRepository>
