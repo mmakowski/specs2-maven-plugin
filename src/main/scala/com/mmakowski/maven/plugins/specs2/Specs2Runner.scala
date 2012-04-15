@@ -1,6 +1,6 @@
 package com.mmakowski.maven.plugins.specs2
 
-import org.specs2.runner.{HtmlRunner, TestInterfaceRunner}
+//import org.specs2.runner.{HtmlRunner, TestInterfaceRunner}
 import org.scalatools.testing.{Event, EventHandler, Logger}
 import org.scalatools.testing.Result
 import org.scalatools.testing.Result._
@@ -61,7 +61,7 @@ class Specs2Runner {
     val classLoader = new URLClassLoader(classpath.toArray[URL], getClass.getClassLoader)
     val runWithTestClassLoader = runWithClassLoader(classLoader, log)_
     
-    val runner = createTestInterfaceRunner(classLoader, log)
+    val runner = new TestInterfaceRunner(classLoader, log)
     
     def runSpec(failingSpecs: Seq[String], spec: String): Seq[String] = {
       log.info(spec + ":")
@@ -78,13 +78,14 @@ class Specs2Runner {
       if (indices isEmpty) true else {
         val index = indices(0)
         log.info("generating " + index)
-        runWithTestClassLoader("index generator", new HtmlRunner().start(index))
+        runWithTestClassLoader("index generator", new HtmlRunner(classLoader).start(index))
       }
     }
 
     val failures = specs.foldLeft(List(): Seq[String])(runSpec)
     logFailingSpecs(failures, log)
-    failures.isEmpty && generateIndex
+    val indexGenerationSuccesful = generateIndex()
+    failures.isEmpty && indexGenerationSuccesful
   }
   
   def url(file: File) = new URL(file.getAbsoluteFile.toURI.toASCIIString)
@@ -120,6 +121,27 @@ class Specs2Runner {
 
   def logFailingSpecs(failures: Seq[String], log: Log) =
     if (!failures.isEmpty) log.info(failures.mkString("\n\nSpecs Failing or In Error:\n", "\n", "\n\n"))
+
+  // Wrappers for specs2 runners that invoke relevant methods via reflection. This approach allows the plug-in to not depend on 
+  // specific version of specs2 and use whatever version has been specified as the project's dependency -- as long, as it provides
+  // runners with signatures expected by this plug-in.
     
-  def createTestInterfaceRunner(classLoader: ClassLoader, log: Log) = new TestInterfaceRunner(classLoader, Array(new DebugLevelLogger(log)))  
+  class TestInterfaceRunner(classLoader: ClassLoader, log: Log) {
+    val RunnerClassName = "org.specs2.runner.TestInterfaceRunner"
+    val runnerClass = classLoader.loadClass(RunnerClassName)
+    val runner = runnerClass.getConstructor(classOf[ClassLoader], classOf[Array[Logger]]).newInstance(classLoader, Array(new DebugLevelLogger(log)))
+    val runSpecificationMethod = runnerClass.getMethod("runSpecification", classOf[String], classOf[EventHandler], classOf[Array[String]]) 
+    
+    def runSpecification(spec: String, handler: EventHandler, modes: Array[String]) = 
+      runSpecificationMethod.invoke(runner, spec, handler, modes)
+  }
+  
+  class HtmlRunner(classLoader: ClassLoader) {
+    val RunnerClassName = "org.specs2.runner.HtmlRunner"
+    val runnerClass = classLoader.loadClass(RunnerClassName)
+    val runner = runnerClass.getConstructor().newInstance()
+    val startMethod = runnerClass.getMethod("start", classOf[Seq[String]])
+    
+    def start(spec: String) = startMethod.invoke(runner, Seq(spec))
+  }
 }

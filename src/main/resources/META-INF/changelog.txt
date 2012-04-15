@@ -12,3 +12,7 @@ Initial release
 
 - fixed a problem with test classpath order being nondeterministic
 - removed undocumented configuration options related to classes and test classes dirs
+
+0.3.0
+
+- the plug-in does not depend on specific version of specs2

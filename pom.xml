@@ -90,11 +90,6 @@
 			<version>${maven.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.specs2</groupId>
-			<artifactId>specs2_${scala.version}</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-		<dependency>
 			<groupId>com.github.scala-incubator.io</groupId>
 			<artifactId>scala-io-core_${scala.version}</artifactId>
 			<version>0.2.0</version>
@@ -110,7 +105,7 @@
 			<artifactId>pegdown</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-		<!-- for specs2 TestFrameworkRunner to work -->
+		<!-- specifies interface of objects that need to be passed to specs2 TestFrameworkRunner -->
 		<dependency>
 			<groupId>org.scala-tools.testing</groupId>
 			<artifactId>test-interface</artifactId>
@@ -121,18 +116,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.9</version>
-		</dependency>
-		<!-- "optional" dependencies of specs2 we need to include to be able to 
-			load specs classes which use them -->
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-all</artifactId>
-			<version>1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.8.5</version>
 		</dependency>
 	</dependencies>
 </project>
