@@ -14,7 +14,7 @@ import scalax.file.PathMatcher._
 
 import scala.collection.JavaConversions._
 
-import scala.collection.mutable.{Map, ListBuffer}
+import scala.collection.mutable.{Map}
 
 /**
  * Executes pre-compiled specifications found in test classes directory. 
@@ -52,60 +52,25 @@ class Specs2Runner {
   }
   
   def runSpecs(log: Log, project: MavenProject, suffix: String): java.lang.Boolean = {
-    val failures = ListBuffer[String]()
-
-    val classpath = {
-      def url(file: File) = new URL(file.getAbsoluteFile.toURI.toASCIIString)
-      def urlsOf(files: List[String]) = files.map(new File(_)).map(url(_))
-      val dependencies = List() ++ project.getTestClasspathElements().asInstanceOf[java.util.List[String]]
-      urlsOf(dependencies)
-    }
+    val classpath = urlsOf(List() ++ project.getTestClasspathElements().asInstanceOf[java.util.List[String]])
     log.debug("test classpath: " + classpath)
-
     val fullSuffix = "%s.class" format suffix
     log.debug("searching for specs ending in %s" format fullSuffix)
     val testClassesPath = Path(project.getBuild.getTestOutputDirectory)
-
-    def findSpecsIn(dir: Path, pkg: String, pred: Path => Boolean): Seq[String] = {
-      def qualified(name: String) = if (pkg.isEmpty) name else pkg + "." + name
-      dir.children().toSeq.collect {
-        case IsFile(f) if pred(f) => Seq(qualified(f.name.take(f.name.length - ".class".length))) 
-        case IsDirectory(d) => findSpecsIn(d, qualified(d.name), pred)
-      }.flatten
-    }
     val specs = findSpecsIn(testClassesPath, "", _.name.endsWith(fullSuffix))
-    
     val classLoader = new URLClassLoader(classpath.toArray[URL], getClass.getClassLoader)
-    def runWithTestClassLoader[T](threadName: String, body: => T) = {
-      object runner extends Runnable {
-        var success = false
-        def run() = {
-          try {
-            body
-            success = true
-          } catch {
-            case e => log.error(e)
-          }
-        }
-      }
-      val t = new Thread(runner, threadName)
-      t.setContextClassLoader(classLoader)
-      t.start()
-      t.join()
-      runner.success
-    }
+    val runWithTestClassLoader = runWithClassLoader(classLoader, log)_
     
-    // test class loader is set on both parent thread and TestInterfaceRunner -- this is probably redundant 
-    val runner = new TestInterfaceRunner(classLoader, Array(new DebugLevelLogger(log)))
-    def runSpec(succesfulSoFar: Boolean, spec: String) = {
+    val runner = createTestInterfaceRunner(classLoader, log)
+    
+    def runSpec(failingSpecs: Seq[String], spec: String): Seq[String] = {
       log.info(spec + ":")
       val handler = new AggregatingHandler
       val runCompleted = runWithTestClassLoader("spec runner", runner.runSpecification(spec, handler, Array("console", "html", "junitxml")))
       log.info(handler.report)
 
       val result = runCompleted && handler.noErrorsOrFailures
-      if (!result) failures += spec
-      succesfulSoFar && result
+      if (!result) failingSpecs :+ spec else failingSpecs
     }
     
     def generateIndex() = {
@@ -117,12 +82,44 @@ class Specs2Runner {
       }
     }
 
-    def printFailingSpecs() {
-      if (!failures.isEmpty) log.info(failures.mkString("\n\nSpecs Failing or In Error:\n", "\n", "\n\n"))
-    }
-
-    val result = specs.foldLeft(true)(runSpec)
-    printFailingSpecs()
-    result && generateIndex
+    val failures = specs.foldLeft(List(): Seq[String])(runSpec)
+    logFailingSpecs(failures, log)
+    failures.isEmpty && generateIndex
   }
+  
+  def url(file: File) = new URL(file.getAbsoluteFile.toURI.toASCIIString)
+
+  def urlsOf(files: List[String]) = files.map(new File(_)).map(url(_))
+
+  def findSpecsIn(dir: Path, pkg: String, pred: Path => Boolean): Seq[String] = {
+    def qualified(name: String) = if (pkg.isEmpty) name else pkg + "." + name
+    dir.children().toSeq.collect {
+      case IsFile(f) if pred(f) => Seq(qualified(f.name.take(f.name.length - ".class".length))) 
+      case IsDirectory(d) => findSpecsIn(d, qualified(d.name), pred)
+    }.flatten
+  }
+  
+  def runWithClassLoader[T](classLoader: ClassLoader, log: Log)(threadName: String, body: => T): Boolean = {
+    object runner extends Runnable {
+      var success = false
+      def run() = {
+        try {
+          body
+          success = true
+        } catch {
+          case e => log.error(e)
+        }
+      }
+    }
+    val t = new Thread(runner, threadName)
+    t.setContextClassLoader(classLoader)
+    t.start()
+    t.join()
+    runner.success
+  }
+
+  def logFailingSpecs(failures: Seq[String], log: Log) =
+    if (!failures.isEmpty) log.info(failures.mkString("\n\nSpecs Failing or In Error:\n", "\n", "\n\n"))
+    
+  def createTestInterfaceRunner(classLoader: ClassLoader, log: Log) = new TestInterfaceRunner(classLoader, Array(new DebugLevelLogger(log)))  
 }
