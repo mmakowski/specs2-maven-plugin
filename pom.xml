@@ -88,19 +88,6 @@
 		</plugins>
 	</build>
 
-	<distributionManagement>
-		<repository>
-			<id>oss.sonatype.org</id>
-			<name>releases</name>
-			<url>http://nexus.scala-tools.org/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>oss.sonatype.org</id>
-			<name>snapshots</name>
-			<url>http://nexus.scala-tools.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
