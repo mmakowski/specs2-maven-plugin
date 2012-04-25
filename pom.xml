@@ -13,7 +13,7 @@
 	<groupId>com.mmakowski</groupId>
 	<artifactId>maven-specs2-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>0.3.0-SNAPSHOT</version>
+	<version>0.3.0</version>
 	<name>specs2 Maven plugin</name>
 	<description>A Maven plugin that executes specs2 specifications</description>
 	<url>https://github.com/mmakowski/maven-specs2-plugin</url>
@@ -84,6 +84,20 @@
 					<source>1.5</source>
 					<target>1.5</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
