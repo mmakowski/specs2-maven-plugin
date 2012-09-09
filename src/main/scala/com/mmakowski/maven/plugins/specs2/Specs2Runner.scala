@@ -55,7 +55,7 @@ class Specs2Runner {
     log.debug("test classpath: " + classpath)
     val fullSuffix = "%s.class" format suffix
     log.debug("searching for specs ending in %s" format fullSuffix)
-    val testClassesPath = Path(project.getBuild.getTestOutputDirectory)
+    val testClassesPath = Path.fromString(project.getBuild.getTestOutputDirectory)
     val specs = findSpecsIn(testClassesPath, "", _.name.endsWith(fullSuffix))
     val classLoader = new URLClassLoader(classpath.toArray[URL], getClass.getClassLoader)
     val runWithTestClassLoader = runWithClassLoader(classLoader, log)_

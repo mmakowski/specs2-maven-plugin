@@ -41,6 +41,7 @@
 	<properties>
 		<maven.version>2.0.9</maven.version>
 		<scala.version>2.10.0-M7</scala.version>
+		<scala-io.version>0.4.1</scala-io.version>
 	</properties>
 
 	<build>
@@ -121,12 +122,12 @@
 		<dependency>
 			<groupId>com.github.scala-incubator.io</groupId>
 			<artifactId>scala-io-core_${scala.version}</artifactId>
-			<version>0.2.0</version>
+			<version>${scala-io.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.scala-incubator.io</groupId>
 			<artifactId>scala-io-file_${scala.version}</artifactId>
-			<version>0.2.0</version>
+			<version>${scala-io.version}</version>
 		</dependency>
 		<!-- for specs2 to generate HTML reports -->
 		<dependency>
