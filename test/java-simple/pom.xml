@@ -46,8 +46,8 @@
     </dependency>
     <dependency>
       <groupId>org.specs2</groupId>
-      <artifactId>specs2_2.9.1</artifactId>
-      <version>1.6.1</version>
+      <artifactId>specs2_${scala.version}</artifactId>
+      <version>${specs2.version}</version>
       <scope>test</scope>
     </dependency>
     <!-- for specs2 to generate HTML reports -->

@@ -13,6 +13,11 @@
 		</repository>    
 	</repositories>
 	
+	<properties>
+		<scala.version>2.10.0-M6</scala.version>
+		<specs2.version>1.11</specs2.version>
+	</properties>
+
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -50,7 +55,7 @@
 				<plugin>
 					<groupId>com.mmakowski</groupId>
 					<artifactId>maven-specs2-plugin</artifactId>
-					<version>0.3.1-SNAPSHOT</version>
+					<version>0.4.0-SNAPSHOT</version>
 					<executions>
 						<execution>
 							<id>verify</id>
