@@ -107,7 +107,7 @@ class Specs2Runner {
           body
           success = true
         } catch {
-          case e => log.error(e)
+          case e: Exception => log.error(e)
         }
       }
     }
