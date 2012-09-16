@@ -14,8 +14,8 @@
 	</repositories>
 	
 	<properties>
-		<scala.version>2.10.0-M6</scala.version>
-		<specs2.version>1.11</specs2.version>
+		<scala.version>2.10.0-M7</scala.version>
+		<specs2.version>1.12.1.1</specs2.version>
 	</properties>
 
 	<build>

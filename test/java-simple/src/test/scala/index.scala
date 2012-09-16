@@ -1,5 +1,5 @@
 import org.specs2._
-import runner.FilesRunner._
+import runner.SpecificationsFinder._
 
 class index extends Specification { def is =
   examplesLinks("Test specifications")
