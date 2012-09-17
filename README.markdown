@@ -13,7 +13,7 @@ Add this to the build/plugins section of your pom:
     <plugin>
       <groupId>com.mmakowski</groupId>
       <artifactId>maven-specs2-plugin</artifactId>
-      <version>0.3.0</version>
+      <version>0.4.0-RC1</version>
       <executions>
         <execution>
           <id>verify</id>
@@ -40,10 +40,19 @@ When `run-specs` goal is executed, the plug-in:
 Limitations
 -----------
 
-At them moment the plug-in has only been tested with scala 2.9.1. It is likely that projects using
-other versions will not work.
+At the moment each version of the plug-in works with a specific version of Scala only:
+
+<table>
+<thead>
+  <tr><th>scala    </th><th>plug-in  </th></tr>
+</thead>
+<tbody>
+  <tr><td>2.9.1    </td><td>0.3.0    </td></tr>
+  <tr><td>2.10.0-M7</td><td>0.4.0-RC1</td></tr>
+</tbody>
+</table>
 
 Credits
 -------
 
-The plug-in is maintained by Maciek Makowski with contributions from Jordan West.
+The plug-in is maintained by Maciek Makowski with contributions from Jordan West and Rafał Krzewski.
