@@ -21,7 +21,7 @@ import scala.collection.mutable.{Map}
  * @author Maciek Makowski
  * @since 0.1.0
  */
-class Specs2Runner {
+class Specs2Runner(args: String) {
   /**
    * A handler that counts the total for each possible result of test when running a Spec
    */
@@ -65,7 +65,7 @@ class Specs2Runner {
     def runSpec(failingSpecs: Seq[String], spec: String): Seq[String] = {
       log.info(spec + ":")
       val handler = new AggregatingHandler
-      val runCompleted = runWithTestClassLoader("spec runner", runner.runSpecification(spec, handler, Array("console", "html", "junitxml")))
+      val runCompleted = runWithTestClassLoader("spec runner", runner.runSpecification(spec, handler, args.split(" ")))
       log.info(handler.report)
 
       val result = runCompleted && handler.noErrorsOrFailures
