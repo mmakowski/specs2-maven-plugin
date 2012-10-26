@@ -23,9 +23,12 @@ public class Specs2RunnerMojo extends AbstractMojo {
     /** @parameter expression="${skipTests}" default-value=false */
     private Boolean skipTests;
 
+    /** @parameter expression="${args}" default-value="console html junitxml" */
+    private String args;
+
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (!skipTests) {
-            if (!(new Specs2Runner().runSpecs(getLog(), mavenProject, suffix).booleanValue()))
+            if (!(new Specs2Runner(args).runSpecs(getLog(), mavenProject, suffix).booleanValue()))
                 throw new MojoFailureException("there have been errors/failures");
         } else {
             System.out.println("SKIPPING SPECS"); // eh, should probably be using a logger
