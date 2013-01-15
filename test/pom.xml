@@ -55,7 +55,7 @@
 				<plugin>
 					<groupId>com.mmakowski</groupId>
 					<artifactId>maven-specs2-plugin</artifactId>
-					<version>0.4.0</version>
+					<version>0.4.1-SNAPSHOT</version>
 					<executions>
 						<execution>
 							<id>verify</id>
