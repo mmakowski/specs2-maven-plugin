@@ -14,8 +14,8 @@
 	</repositories>
 	
 	<properties>
-		<scala.version>2.10.0-M7</scala.version>
-		<specs2.version>1.12.1.1</specs2.version>
+		<scala.version>2.10</scala.version>
+		<specs2.version>1.13</specs2.version>
 	</properties>
 
 	<build>
@@ -55,7 +55,7 @@
 				<plugin>
 					<groupId>com.mmakowski</groupId>
 					<artifactId>maven-specs2-plugin</artifactId>
-					<version>0.4.0-RC1</version>
+					<version>0.4.0</version>
 					<executions>
 						<execution>
 							<id>verify</id>
