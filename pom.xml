@@ -41,7 +41,8 @@
 	<properties>
 		<maven.version>2.0.9</maven.version>
 		<scala.version>2.10</scala.version>
-		<scala-io.version>0.4.1</scala-io.version>
+		<scala.lib.version>2.10.0</scala.lib.version>
+		<scala-io.version>0.4.2</scala-io.version>
 	</properties>
 
 	<build>
@@ -118,6 +119,11 @@
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
 			<version>${maven.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>${scala.lib.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.scala-incubator.io</groupId>
