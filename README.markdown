@@ -56,7 +56,7 @@ At the moment each version of the plug-in works with a specific version of Scala
 Credits
 -------
 
-The plug-in is maintained by Maciek Makowski with contributions from:
+The plug-in is maintained by [Maciek Makowski](https://github.com/mmakowski) with contributions from:
 
 * [Emrys Ingersoll](https://github.com/wemrysi)
 * [Rafał Krzewski](https://github.com/rkrzewski)
