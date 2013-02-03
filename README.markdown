@@ -58,8 +58,8 @@ Credits
 
 The plug-in is maintained by Maciek Makowski with contributions from:
 
-* Emrys Ingersoll
-* Rafał Krzewski 
-* Taylor Leese
-* Eric Torreborre
-* Jordan West
+* [Emrys Ingersoll](https://github.com/wemrysi)
+* [Rafał Krzewski](https://github.com/rkrzewski)
+* [Taylor Leese](https://github.com/taylorleese)
+* [Eric Torreborre](https://github.com/etorreborre)
+* [Jordan West](https://github.com/jrwest)
