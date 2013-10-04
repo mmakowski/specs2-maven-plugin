@@ -13,7 +13,7 @@ Add this to the build/plugins section of your pom:
     <plugin>
       <groupId>com.mmakowski</groupId>
       <artifactId>maven-specs2-plugin</artifactId>
-      <version>0.4.1</version>
+      <version>0.4.2</version>
       <executions>
         <execution>
           <id>verify</id>
@@ -49,7 +49,7 @@ At the moment each version of the plug-in works with a specific version of Scala
 <tbody>
   <tr><td>2.9.1    </td><td>0.3.0    </td></tr>
   <tr><td>2.10.0-M7</td><td>0.4.0-RC1</td></tr>
-  <tr><td>2.10     </td><td>0.4.1    </td></tr>
+  <tr><td>2.10     </td><td>0.4.2    </td></tr>
 </tbody>
 </table>
 
