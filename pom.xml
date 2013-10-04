@@ -139,7 +139,7 @@
 		<dependency>
 			<groupId>org.pegdown</groupId>
 			<artifactId>pegdown</artifactId>
-			<version>1.0.2</version>
+			<version>1.2.1</version>
 		</dependency>
 		<!-- specifies interface of objects that need to be passed to specs2 TestFrameworkRunner -->
 		<dependency>
