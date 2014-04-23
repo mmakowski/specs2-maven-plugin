@@ -40,9 +40,9 @@
 
 	<properties>
 		<maven.version>2.0.9</maven.version>
-		<scala.version>2.10</scala.version>
-		<scala.lib.version>2.10.2</scala.lib.version>
-		<scala-io.version>0.4.2</scala-io.version>
+		<scala.version>2.11</scala.version>
+		<scala.lib.version>2.11.0</scala.lib.version>
+		<scala-io.version>0.4.3</scala-io.version>
 	</properties>
 
 	<build>
