@@ -13,7 +13,7 @@ Add this to the build/plugins section of your pom:
     <plugin>
       <groupId>com.mmakowski</groupId>
       <artifactId>maven-specs2-plugin</artifactId>
-      <version>0.4.2</version>
+      <version>0.4.3</version>
       <executions>
         <execution>
           <id>verify</id>
@@ -62,5 +62,6 @@ The plug-in is maintained by [Maciek Makowski](https://github.com/mmakowski) wit
 * [Emrys Ingersoll](https://github.com/wemrysi)
 * [Rafał Krzewski](https://github.com/rkrzewski)
 * [Taylor Leese](https://github.com/taylorleese)
+* [Adam Retter](https://github.com/adamretter)
 * [Eric Torreborre](https://github.com/etorreborre)
 * [Jordan West](https://github.com/jrwest)
