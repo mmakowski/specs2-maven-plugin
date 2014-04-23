@@ -14,8 +14,8 @@
 	</repositories>
 	
 	<properties>
-		<scala.version>2.10</scala.version>
-		<specs2.version>2.2.2</specs2.version>
+		<scala.version>2.11</scala.version>
+		<specs2.version>2.3.11</specs2.version>
 	</properties>
 
 	<build>
