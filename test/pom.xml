@@ -16,6 +16,7 @@
 	<properties>
 		<scala.version>2.11</scala.version>
 		<specs2.version>2.3.11</specs2.version>
+        <plugin.version>0.4.3</plugin.version>
 	</properties>
 
 	<build>
@@ -55,7 +56,7 @@
 				<plugin>
 					<groupId>com.mmakowski</groupId>
 					<artifactId>maven-specs2-plugin</artifactId>
-					<version>0.4.3-SNAPSHOT</version>
+					<version>${plugin.version}</version>
 					<executions>
 						<execution>
 							<id>verify</id>
