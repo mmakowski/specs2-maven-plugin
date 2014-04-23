@@ -50,6 +50,7 @@ At the moment each version of the plug-in works with a specific version of Scala
   <tr><td>2.9.1    </td><td>0.3.0    </td></tr>
   <tr><td>2.10.0-M7</td><td>0.4.0-RC1</td></tr>
   <tr><td>2.10     </td><td>0.4.2    </td></tr>
+  <tr><td>2.11	   </td><td>0.4.3    </td></tr>
 </tbody>
 </table>
 
