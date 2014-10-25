@@ -73,6 +73,7 @@
 
 	<modules>
         <module>java-spring</module>
+        <module>java-custom-suffix</module>
         <module>java-simple</module>
 	</modules>
 </project>
