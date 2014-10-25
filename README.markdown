@@ -1,4 +1,4 @@
-Maven Specs2 Plug-in
+Specs2 Maven Plug-in
 ====================
 
 This plug-in executes [specs2](http://etorreborre.github.com/specs2/) specifications that have been previously 
