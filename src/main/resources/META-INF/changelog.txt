@@ -17,6 +17,11 @@ Initial release
 
 - the plug-in does not depend on specific version of specs2
 
+0.4.0
+
+- added the possibility to pass arguments to specs2 runner
+- scala 2.10 compatibility
+
 0.4.4
 
 - renamed from maven-specs2-plugin to specs2-maven-plugin
