@@ -16,3 +16,7 @@ Initial release
 0.3.0
 
 - the plug-in does not depend on specific version of specs2
+
+0.4.4
+
+- renamed from maven-specs2-plugin to specs2-maven-plugin
