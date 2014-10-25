@@ -2,11 +2,11 @@
   <modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.mmakowski</groupId>
-		<artifactId>maven-specs2-plugin-tests</artifactId>
+		<artifactId>specs2-maven-plugin-tests</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>    
 
-	<artifactId>maven-specs2-plugin-test-java-spring</artifactId>
+	<artifactId>specs2-maven-plugin-test-java-spring</artifactId>
   <packaging>pom</packaging>
 
 	<name>java-spring</name>

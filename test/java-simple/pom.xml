@@ -6,11 +6,11 @@
 
   <parent>
     <groupId>com.mmakowski</groupId>
-    <artifactId>maven-specs2-plugin-tests</artifactId>
+    <artifactId>specs2-maven-plugin-tests</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>    
 
-  <artifactId>maven-specs2-plugin-test-java-simple</artifactId>
+  <artifactId>specs2-maven-plugin-test-java-simple</artifactId>
   <name>java-simple</name>
  
   <build>
@@ -21,7 +21,7 @@
       </plugin>
       <plugin>
         <groupId>com.mmakowski</groupId>
-        <artifactId>maven-specs2-plugin</artifactId>
+        <artifactId>specs2-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

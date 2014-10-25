@@ -12,7 +12,7 @@ Add this to the build/plugins section of your pom:
 
     <plugin>
       <groupId>com.mmakowski</groupId>
-      <artifactId>maven-specs2-plugin</artifactId>
+      <artifactId>specs2-maven-plugin</artifactId>
       <version>0.4.3</version>
       <executions>
         <execution>
