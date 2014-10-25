@@ -31,7 +31,7 @@ public class Specs2RunnerMojo extends AbstractMojo {
             if (!(new Specs2Runner(args).runSpecs(getLog(), mavenProject, suffix).booleanValue()))
                 throw new MojoFailureException("there have been errors/failures");
         } else {
-            System.out.println("SKIPPING SPECS"); // eh, should probably be using a logger
+            getLog().info("Specs are skipped.");
         }
     }
 }

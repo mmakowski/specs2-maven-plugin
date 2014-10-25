@@ -5,6 +5,7 @@ import java.net.{URL, URLClassLoader}
 
 import org.apache.maven.plugin.logging.Log
 import org.apache.maven.project.MavenProject
+import org.scalatools.testing.Result._
 import org.scalatools.testing.{Event, EventHandler, Logger, Result}
 
 import scala.collection.JavaConverters._
@@ -23,23 +24,23 @@ class Specs2Runner(args: String) {
    * A handler that counts the total for each possible result of test when running a Spec
    */
   private class AggregatingEventHandler extends EventHandler {
-    val testCounts: mutable.Map[String, Int] = mutable.Map() withDefaultValue 0
+    val testCounts: mutable.Map[Result, Int] = mutable.Map() withDefaultValue 0
     
     def handle(event: Event) {
-      val resultType = event.result.toString
+      val resultType = event.result
       testCounts(resultType) = testCounts(resultType) + 1  
     }
     
-    def report = Result.values.map(s => s"$s: ${testCounts(s.toString)}").mkString(", ")
+    def report = Result.values.map(s => s"$s: ${testCounts(s)}").mkString(", ")
 
-    def noErrorsOrFailures = testCounts("Error") + testCounts("Failure") == 0
+    def noErrorsOrFailures = testCounts(Error) + testCounts(Failure) == 0
   }
-  
+
   /**
    * Logger for test interface -- funnels all messages except for errors into maven debug logger 
    */
   private class DebugLevelLogger(log: Log) extends Logger {
-    def ansiCodesSupported = false
+    val ansiCodesSupported = false
     def error(msg: String) = log.debug(msg)
     def warn(msg: String) = log.debug(msg)
     def info(msg: String) = log.debug(msg)

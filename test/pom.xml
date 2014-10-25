@@ -72,7 +72,7 @@
 	</build>
 
 	<modules>
-		<module>java-simple</module>
-		<module>java-spring</module>
+        <module>java-spring</module>
+        <module>java-simple</module>
 	</modules>
 </project>
