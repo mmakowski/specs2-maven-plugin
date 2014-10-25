@@ -16,7 +16,7 @@
 	<properties>
 		<scala.version>2.11</scala.version>
 		<specs2.version>2.3.11</specs2.version>
-        <plugin.version>0.4.4</plugin.version>
+        <plugin.version>0.4.5-SNAPSHOT</plugin.version>
 	</properties>
 
 	<build>
