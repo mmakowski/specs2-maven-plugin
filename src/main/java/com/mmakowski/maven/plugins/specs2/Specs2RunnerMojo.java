@@ -23,7 +23,7 @@ public class Specs2RunnerMojo extends AbstractMojo {
     /** @parameter expression="${skipTests}" default-value=false */
     private Boolean skipTests;
 
-    /** @parameter expression="${args}" default-value="console html junitxml" */
+    /** @parameter expression="${args}" default-value="html junitxml" */
     private String args;
 
     public void execute() throws MojoExecutionException, MojoFailureException {

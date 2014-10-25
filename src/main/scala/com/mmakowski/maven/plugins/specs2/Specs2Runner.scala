@@ -36,14 +36,11 @@ class Specs2Runner(args: String) {
     def noErrorsOrFailures = testCounts(Error) + testCounts(Failure) == 0
   }
 
-  /**
-   * Logger for test interface -- funnels all messages except for errors into maven debug logger 
-   */
-  private class DebugLevelLogger(log: Log) extends Logger {
+  private class MavenLogLogger(log: Log) extends Logger {
     val ansiCodesSupported = false
-    def error(msg: String) = log.debug(msg)
-    def warn(msg: String) = log.debug(msg)
-    def info(msg: String) = log.debug(msg)
+    def error(msg: String) = log.error(msg)
+    def warn(msg: String) = log.warn(msg)
+    def info(msg: String) = log.info(msg)
     def debug(msg: String) = log.debug(msg)
     def trace(t: Throwable) = log.error(t)
   }
@@ -126,7 +123,7 @@ class Specs2Runner(args: String) {
   private class TestInterfaceRunner(classLoader: ClassLoader, log: Log) {
     val RunnerClassName = "org.specs2.runner.TestInterfaceRunner"
     val runnerClass = classLoader.loadClass(RunnerClassName)
-    val runner = runnerClass.getConstructor(classOf[ClassLoader], classOf[Array[Logger]]).newInstance(classLoader, Array(new DebugLevelLogger(log)))
+    val runner = runnerClass.getConstructor(classOf[ClassLoader], classOf[Array[Logger]]).newInstance(classLoader, Array(new MavenLogLogger(log)))
     val runSpecificationMethod = runnerClass.getMethod("runSpecification", classOf[String], classOf[EventHandler], classOf[Array[String]]) 
     
     def runSpecification(spec: String, handler: EventHandler, modes: Array[String]) = 
