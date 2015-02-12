@@ -48,9 +48,12 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.scala-tools</groupId>
-				<artifactId>maven-scala-plugin</artifactId>
-				<version>2.15.2</version>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>scala-maven-plugin</artifactId>
+				<configuration>
+					<recompileMode>all</recompileMode>	<!-- NOTE: "incremental" compilation although faster may require passing to MAVEN_OPTS="-XX:MaxPermSize=128m" -->
+					<useZincServer>true</useZincServer>	<!-- NOTE: if you have Zinc server installed and running compilation will be offloaded which can speed things up -->
+				</configuration>
 				<executions>
 					<execution>
 						<id>scala-compile-first</id>
@@ -86,6 +89,14 @@
 					<source>1.5</source>
 					<target>1.5</target>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
