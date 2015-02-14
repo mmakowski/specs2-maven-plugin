@@ -39,18 +39,21 @@
 	</developers>
 
 	<properties>
-		<maven.version>2.0.9</maven.version>
+		<maven.version>2.2.1</maven.version>
 		<scala.version>2.11</scala.version>
-		<scala.lib.version>2.11.2</scala.lib.version>
-		<scala-io.version>0.4.3</scala-io.version>
+		<scala.lib.version>2.11.5</scala.lib.version>
+		<scala-io.version>0.4.3-1</scala-io.version>
 	</properties>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.scala-tools</groupId>
-				<artifactId>maven-scala-plugin</artifactId>
-				<version>2.15.2</version>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>scala-maven-plugin</artifactId>
+				<configuration>
+					<recompileMode>all</recompileMode>	<!-- NOTE: "incremental" compilation although faster may require passing to MAVEN_OPTS="-XX:MaxPermSize=128m" -->
+					<useZincServer>true</useZincServer>	<!-- NOTE: if you have Zinc server installed and running compilation will be offloaded which can speed things up -->
+				</configuration>
 				<executions>
 					<execution>
 						<id>scala-compile-first</id>
@@ -72,7 +75,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
+				<version>2.4</version>
 				<configuration>
 					<includes>
 						<include>**/*</include>
@@ -81,11 +84,19 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.2</version>
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -139,7 +150,7 @@
 		<dependency>
 			<groupId>org.pegdown</groupId>
 			<artifactId>pegdown</artifactId>
-			<version>1.2.1</version>
+			<version>1.4.2</version>
 		</dependency>
 		<!-- specifies interface of objects that need to be passed to specs2 TestFrameworkRunner -->
 		<dependency>
@@ -151,7 +162,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.9</version>
+			<version>4.12</version>
 		</dependency>
 	</dependencies>
 </project>
