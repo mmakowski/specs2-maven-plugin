@@ -5,13 +5,13 @@ import org.junit.runner._
 import runner._
 
 @RunWith(classOf[JUnitRunner])
-class SuccessFailureErrorSkippedSpec extends Specification { def is =
-  "Possible statuses"                       ^
-    "Success"  ! success ^
-    "Failure"  ! failure ^
-    "Error"    ! error   ^
-    "Skipped"  ! todo    ^
-                       end
+class SuccessFailureErrorSkippedSpec extends Specification { def is = s2"""
+  Possible statuses
+    Success  $success
+    Failure  $failure
+    Error    $error
+    Skipped  $todo
+"""
     
   def error: org.specs2.execute.Result = throw new RuntimeException
 }

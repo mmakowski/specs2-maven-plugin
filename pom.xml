@@ -13,7 +13,7 @@
 	<groupId>com.mmakowski</groupId>
 	<artifactId>specs2-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>0.4.5-SNAPSHOT</version>
+	<version>0.5.0</version>
 	<name>specs2 Maven plugin</name>
 	<description>A Maven plugin that executes specs2 specifications</description>
 	<url>https://github.com/mmakowski/maven-specs2-plugin</url>
@@ -145,12 +145,6 @@
 			<groupId>com.github.scala-incubator.io</groupId>
 			<artifactId>scala-io-file_${scala.version}</artifactId>
 			<version>${scala-io.version}</version>
-		</dependency>
-		<!-- for specs2 to generate HTML reports -->
-		<dependency>
-			<groupId>org.pegdown</groupId>
-			<artifactId>pegdown</artifactId>
-			<version>1.4.2</version>
 		</dependency>
 		<!-- specifies interface of objects that need to be passed to specs2 TestFrameworkRunner -->
 		<dependency>

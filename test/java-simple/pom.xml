@@ -50,12 +50,5 @@
       <version>${specs2.version}</version>
       <scope>test</scope>
     </dependency>
-    <!-- for specs2 to generate HTML reports -->
-    <dependency>
-      <groupId>org.pegdown</groupId>
-      <artifactId>pegdown</artifactId>
-      <version>1.0.2</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 </project>
