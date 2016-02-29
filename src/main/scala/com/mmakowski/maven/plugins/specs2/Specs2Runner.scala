@@ -121,21 +121,16 @@ class Specs2Runner(args: String) {
   // runners with signatures expected by this plug-in.
     
   private class TestInterfaceRunner(classLoader: ClassLoader, log: Log) {
-    val RunnerClassName = "org.specs2.runner.TestInterfaceRunner"
-    val runnerClass = classLoader.loadClass(RunnerClassName)
-    val runner = runnerClass.getConstructor(classOf[ClassLoader], classOf[Array[Logger]]).newInstance(classLoader, Array(new MavenLogLogger(log)))
-    val runSpecificationMethod = runnerClass.getMethod("runSpecification", classOf[String], classOf[EventHandler], classOf[Array[String]]) 
-    
+    import org.specs2.runner.{TestInterfaceRunner => Specs2TestInterfaceRunner}
+    val runner = new Specs2TestInterfaceRunner(classLoader, Array(new MavenLogLogger(log)))
     def runSpecification(spec: String, handler: EventHandler, modes: Array[String]) = 
-      runSpecificationMethod.invoke(runner, spec, handler, modes)
+      runner.runSpecification(spec, handler, modes)
   }
   
   private class HtmlRunner(classLoader: ClassLoader) {
-    val RunnerClassName = "org.specs2.runner.HtmlRunner"
-    val runnerClass = classLoader.loadClass(RunnerClassName)
-    val runner = runnerClass.getConstructor().newInstance()
-    val startMethod = runnerClass.getMethod("start", classOf[Seq[String]])
+    import org.specs2.runner.{HtmlRunner => Specs2HtmlRunner}
+    val runner = new Specs2HtmlRunner()
     
-    def start(spec: String) = startMethod.invoke(runner, Seq(spec))
+    def start(spec: String) = runner.start(Seq(spec):_*)
   }
 }
