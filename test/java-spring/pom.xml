@@ -7,7 +7,7 @@
 	</parent>    
 
 	<artifactId>specs2-maven-plugin-test-java-spring</artifactId>
-  <packaging>pom</packaging>
+  	<packaging>pom</packaging>
 
 	<name>java-spring</name>
 
