@@ -1,6 +1,9 @@
 Specs2 Maven Plug-in
 ====================
 
+[![Build Status](https://travis-ci.org/mmakowski/specs2-maven-plugin.svg?branch=master)](https://travis-ci.org/mmakowski/specs2-maven-plugin)
+[![Maven Central](https://img.shields.io/maven-central/v/com.mmakowski/specs2-maven-plugin.svg)](https://maven-badges.herokuapp.com/maven-central/com.mmakowski/specs2-maven-plugin)
+
 This plug-in executes [specs2](http://etorreborre.github.com/specs2/) specifications that have been previously 
 compiled to the test classes directory. It assumes that all specification classes have names ending with specified
 suffix (_Spec_ by default) and that all classes with such name are specifications.
