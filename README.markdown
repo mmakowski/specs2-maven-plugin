@@ -8,6 +8,8 @@ This plug-in executes [specs2](http://etorreborre.github.com/specs2/) specificat
 compiled to the test classes directory. It assumes that all specification classes have names ending with specified
 suffix (_Spec_ by default) and that all classes with such name are specifications.
 
+**NOTE: the plugin only supports specs2 2.x. It does not work with specs2 3.x.**
+
 Usage
 -----
 
